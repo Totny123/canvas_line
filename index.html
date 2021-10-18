@@ -11,31 +11,58 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div id="canvas"></div>
+    <canvas id="canvas"></canvas>
     <script>
       let canvas = document.getElementById("canvas");
+      canvas.width = document.documentElement.clientWidth;
+      canvas.height = document.documentElement.clientHeight;
       let painting = false;
-      canvas.onmousedown = () => {
-        painting = true;
-      };
-      canvas.onmousemove = (e) => {
-        if (painting) {
-          let div = document.createElement("div");
-          div.style.position = "absolute";
-          div.style.width = "10px";
-          div.style.height = "10px";
-          div.style.border = "1px solid green";
-          div.style.top = e.clientY + "px";
-          div.style.left = e.clientX + "px";
-          div.style.transform = "translate(-50%,-50%)";
-          div.style.borderRadius = "50%";
-          div.style.backgroundColor = "green";
-          canvas.appendChild(div);
-        }
-      };
-      canvas.onmouseup = () => {
-        painting = false;
-      };
+      let last = [];
+      if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+        canvas.ontouchstart = (e) => {
+          painting = true;
+          last = [e.touches[0].clientX, e.touches[0].clientY];
+        };
+        canvas.ontouchmove = (e) => {
+          let x = e.touches[0].clientX;
+          let y = e.touches[0].clientY;
+          if (painting) {
+            let ctx = canvas.getContext("2d");
+            ctx.lineWidth = 10; //设置线宽
+            ctx.lineCap = "round";
+            // 填充三角形
+            ctx.beginPath();
+            ctx.moveTo(last[0], last[1]);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            last = [x, y];
+          }
+        };
+        canvas.onmouseup = () => {
+          painting = false;
+        };
+      } else {
+        canvas.onmousedown = (e) => {
+          painting = true;
+          last = [e.clientX, e.clientY];
+        };
+        canvas.onmousemove = (e) => {
+          if (painting) {
+            let ctx = canvas.getContext("2d");
+            ctx.lineWidth = 10; //设置线宽
+            ctx.lineCap = "round";
+            // 填充三角形
+            ctx.beginPath();
+            ctx.moveTo(last[0], last[1]);
+            ctx.lineTo(e.clientX, e.clientY);
+            ctx.stroke();
+            last = [e.clientX, e.clientY];
+          }
+        };
+        canvas.onmouseup = () => {
+          painting = false;
+        };
+      }
     </script>
   </body>
 </html>

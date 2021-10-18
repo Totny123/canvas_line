@@ -4,8 +4,5 @@
   box-sizing: border-box;
 }
 #canvas{
-	position:relative;
-	height: 100vh;
-	border:1px solid red;
-
+	vertical-align: middle;
 }
