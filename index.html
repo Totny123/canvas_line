@@ -8,6 +8,34 @@
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>canvas画板</title>
+    <link rel="stylesheet" href="./style.css" />
   </head>
-  <body></body>
+  <body>
+    <div id="canvas"></div>
+    <script>
+      let canvas = document.getElementById("canvas");
+      let painting = false;
+      canvas.onmousedown = () => {
+        painting = true;
+      };
+      canvas.onmousemove = (e) => {
+        if (painting) {
+          let div = document.createElement("div");
+          div.style.position = "absolute";
+          div.style.width = "10px";
+          div.style.height = "10px";
+          div.style.border = "1px solid green";
+          div.style.top = e.clientY + "px";
+          div.style.left = e.clientX + "px";
+          div.style.transform = "translate(-50%,-50%)";
+          div.style.borderRadius = "50%";
+          div.style.backgroundColor = "green";
+          canvas.appendChild(div);
+        }
+      };
+      canvas.onmouseup = () => {
+        painting = false;
+      };
+    </script>
+  </body>
 </html>
